@@ -50,6 +50,36 @@ public class SellerDAO {
 	
 	public void insert(SellerDTO sdto) {
 		// TODO Auto-generated method stub
+		if(conn()) {
+			try {		
+				String sql ="insert into"+sdto.getId()+"_s values ("
+								+sdto.getId()+"_s_seq,?,?,?,?)";
+				PreparedStatement psmt = conn.prepareStatement(sql);
+				psmt.setString(1, sdto.getG_name());
+				psmt.setLong(2, sdto.getG_num());
+				psmt.setLong(3, sdto.getPrice());
+				psmt.setString(4, sdto.getContent());
+
+				int resultInt = psmt.executeUpdate();
+				if(resultInt > 0) {
+					conn.commit();	// 현재 작업 저장
+				}else {
+					conn.rollback();	// 현재 작업 취소 
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				try {
+					if(conn != null) conn.close();
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+			}
+		}else {
+			System.out.println("데이터베이스 커넥션 실패");
+		
+		}
 		
 	}
 

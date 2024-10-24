@@ -42,7 +42,7 @@ content varchar2(100));
 주문접수 테이블?
 
 
-		
+sequence		
 		
  */
 

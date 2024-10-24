@@ -10,6 +10,10 @@ import dto.UserDTO;
 
 
 public class MainMenu {
+//	UserDTO loginUser = null;
+	ArrayList<SellerDTO> slist = new ArrayList<>();
+	ArrayList<GuestDTO> glist = new ArrayList<>();
+	
 	private MainDAO mdao = MainDAO.getInstance();
 	private GuestService gs = GuestService.getInstance();
 	private SellerService ss = SellerService.getInstance();
@@ -47,15 +51,19 @@ public class MainMenu {
 		Scanner in = new Scanner(System.in);
 		System.out.println("ID 입력");
 		String id = in.nextLine();
-		UserDTO loginUser = mdao.select(id);
-		if(loginUser != null) {
+		UserDTO login = mdao.select(id);
+		if(login != null) {
 			System.out.println("비밀번호 입력");
 			String pwd = in.nextLine();
-			if(loginUser.getPwd().equals(pwd)) {
+			if(login.getPwd().equals(pwd)) {
 				System.out.println("로그인성공");
-				if(loginUser.getCk().equals("g")) {
+				if(login.getCk().equals("g")) { // 개인일때 
+
 					gs.menu();
-				}else {ss.menu();}
+				}else {	// s일때 셀러일때
+
+					ss.menu();
+					}
 			}else {
 				System.out.println("비밀번호 오류");
 			}
@@ -78,7 +86,7 @@ public class MainMenu {
 				String name = in.nextLine();
 				System.out.println("주소 입력");
 				String addr = in.nextLine();
-				GuestDTO gdto = new GuestDTO();
+				GuestDTO gdto = new GuestDTO();	
 				gdto.setCk("g");
 				gdto.setId(id);
 				gdto.setPwd(pwd);

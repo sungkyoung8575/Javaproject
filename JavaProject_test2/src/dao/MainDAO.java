@@ -52,27 +52,27 @@ public class MainDAO {
 
 
 		
-	public void insertG(GuestDTO dto) { // 개인고객 insert , 개인테이블,시퀀스생성
+	public void insertG(GuestDTO gdto) { // 개인고객 insert , 개인테이블,시퀀스생성
 		if(conn()) {
 			try {
 				String sql ="insert into alluser values (?,?,?,?,?,?,?)";
 				PreparedStatement psmt = conn.prepareStatement(sql);
-				psmt.setString(1, dto.getCk());
-				psmt.setString(2, dto.getId());
-				psmt.setString(3, dto.getPwd());
-				psmt.setString(4, dto.getName());
-				psmt.setString(5, dto.getAddr());
+				psmt.setString(1, gdto.getCk());
+				psmt.setString(2, gdto.getId());
+				psmt.setString(3, gdto.getPwd());
+				psmt.setString(4, gdto.getName());
+				psmt.setString(5, gdto.getAddr());
 				psmt.setString(6, "null");
 				psmt.setInt(7, 0);
 				int resultInt = psmt.executeUpdate();
-				String sql2 = "create table "+dto.getId()	// 컬럼명 임시/ 수정해야함
+				String sql2 = "create table "+gdto.getId()	// 컬럼명 임시/ 수정해야함
 							+"_g(g_name varchar2(20),"
 							+ "g_num number(3),"
 							+ "g_price number(6),"
 							+ "g_date timestamp default sysdate)";
 				PreparedStatement psmt2 = conn.prepareStatement(sql2);
 				resultInt = psmt2.executeUpdate();
-				String sql3 ="create sequence "+dto.getId()
+				String sql3 ="create sequence "+gdto.getId()
 							+"_g_seq";
 				PreparedStatement psmt3 = conn.prepareStatement(sql3);
 				resultInt = psmt3.executeUpdate();
@@ -148,7 +148,7 @@ public class MainDAO {
 					psmt.setString(1, find);
 					ResultSet rs = psmt.executeQuery();
 					if(rs.next()) {
-						GuestDTO temp = new GuestDTO();
+						UserDTO temp = new UserDTO();
 						temp.setCk(rs.getNString("ck"));
 						temp.setId(rs.getNString("id"));
 						temp.setPwd(rs.getNString("pwd"));

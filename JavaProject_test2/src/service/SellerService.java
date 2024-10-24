@@ -3,11 +3,11 @@ package service;
 import java.util.Scanner;
 
 import dao.SellerDAO;
-import dto.GuestDTO;
 import dto.SellerDTO;
+import dto.UserDTO;
 
 public class SellerService {
-
+//	SellerDTO loginSeller = null;
 	public static SellerService ss=null; // 싱글톤 디자인 코딩시작
 	private SellerDAO sdao = SellerDAO.getInstance();
 
@@ -22,6 +22,7 @@ public class SellerService {
 	} // 싱글톤 디자인코딩 끝
 
 	public void menu() {
+//		System.out.println(loginSeller.getName()+"님 환영합니다.");
 		Scanner in = new Scanner(System.in);
 		boolean flag = true;
 		while(flag) {
@@ -42,7 +43,6 @@ public class SellerService {
 				case 6:	flag = false; break;
 			}
 		}
-		in.close();
 	}
 		
 		
@@ -66,11 +66,18 @@ public class SellerService {
 		int g_num = in.nextInt();in.nextLine();
 		System.out.println("가격 입력");
 		int price = in.nextInt();in.nextLine();
+		System.out.println("제품 설명 입력");
+		String content = in.nextLine();
 		SellerDTO sdto = new SellerDTO();
 		sdto.setG_name(g_name);
 		sdto.setG_num(g_num);
 		sdto.setPrice(price);
 		sdao.insert(sdto);
+//		loginSeller.setG_name(g_name);
+//		loginSeller.setG_num(g_num);
+//		loginSeller.setPrice(price);
+//		loginSeller.setContent(content);
+//		sdao.insert(loginSeller);
 		
 		
 	}
