@@ -1,0 +1,23 @@
+USB interface (나중에 검색해봥~)
+
+
+interface  - 의존도를 낮춰 외부 소스수정을 최소화
+
+--------------------------------------------------
+그림 기억행 
+- ex) public interface MemberDAO(){}
+
+인터페이스는 추상메서드만 가질수있다 // 기능만 정의한것
+public void add();
+public void del();
+
+inplement OMember(){}
+@ add() {실제코드, 드라이버로드 ~ 등등} 
+@ del 
+
+tiger
+MemberDAO m = new OMember (나중에 오라클아니라 mysql이면 객체만 만들어주면됨)
+m.add()
+m.del()  
+
+>> 나중에 수정시 OMember 코드 수정하면됨
