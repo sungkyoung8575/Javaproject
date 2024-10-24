@@ -10,9 +10,7 @@ import dto.UserDTO;
 
 
 public class MainMenu {
-//	UserDTO loginUser = null;
-	ArrayList<SellerDTO> slist = new ArrayList<>();
-	ArrayList<GuestDTO> glist = new ArrayList<>();
+	UserDTO loginUser = null;
 	
 	private MainDAO mdao = MainDAO.getInstance();
 	private GuestService gs = GuestService.getInstance();
@@ -51,23 +49,26 @@ public class MainMenu {
 		Scanner in = new Scanner(System.in);
 		System.out.println("ID 입력");
 		String id = in.nextLine();
-		UserDTO login = mdao.select(id);
-		if(login != null) {
-			System.out.println("비밀번호 입력");
-			String pwd = in.nextLine();
-			if(login.getPwd().equals(pwd)) {
-				System.out.println("로그인성공");
-				if(login.getCk().equals("g")) { // 개인일때 
-
-					gs.menu();
-				}else {	// s일때 셀러일때
-
-					ss.menu();
-					}
-			}else {
-				System.out.println("비밀번호 오류");
+		int g = check(id);
+		if(g != 1) {
+			int g2 = logincheck(id);	// 리턴값 : 개인 1 , 사업자 2 , 비밀번호 오류 -1
+			if(g2==1) {
+				GuestDTO login = mdao.selectGuest(id);
+				loginUser = login;
+				gs.loginGuest = (GuestDTO) loginUser;
+				gs.menu();
+				
+			}else if(g2 ==2) {
+				SellerDTO login = mdao.selectSeller(id);
+				loginUser = login;
+				ss.loginSeller = (SellerDTO) loginUser;
+				ss.menu();
 			}
+			
+		}else {
+			System.out.println("id가 존재하지 않습니다");
 		}
+
 		
 	}
 
@@ -130,12 +131,27 @@ public class MainMenu {
 
 
 
-	public int check(String find) {
-		UserDTO g = mdao.select(find);
+	public int check(String find) {		// 아이디 중복체크
+		UserDTO g = mdao.selectID(find);
 		if(g != null) {	// 값이 있을때 -1 리턴
 			return -1;
 		}
 		return 1;
+	}
+	
+	public int logincheck(String find) {
+		Scanner in = new Scanner(System.in);
+		UserDTO g2 = mdao.selectID(find);
+		System.out.println("비밀번호입력");
+		String pwd = in.nextLine();
+		if(g2.getPwd().equals(pwd)) {
+			if(g2.getCk().equals("g")) {
+				return 1;	// 개인이면 1 리턴
+			}else {
+				return 2;
+			}
+		}
+		return -1;		// 비밀번호 오류
 	}
 
 

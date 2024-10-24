@@ -1,13 +1,14 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.SellerDAO;
-import dto.GuestDTO;
 import dto.SellerDTO;
+import dto.UserDTO;
 
 public class SellerService {
-
+	SellerDTO loginSeller = null;
 	public static SellerService ss=null; // 싱글톤 디자인 코딩시작
 	private SellerDAO sdao = SellerDAO.getInstance();
 
@@ -22,6 +23,7 @@ public class SellerService {
 	} // 싱글톤 디자인코딩 끝
 
 	public void menu() {
+		System.out.println(loginSeller.getName()+"님 환영합니다.");
 		Scanner in = new Scanner(System.in);
 		boolean flag = true;
 		while(flag) {
@@ -42,12 +44,12 @@ public class SellerService {
 				case 6:	flag = false; break;
 			}
 		}
-		in.close();
 	}
 		
 		
 	private void g_all() { // 올린상품 전체보기
-		// TODO Auto-generated method stub
+		ArrayList<SellerDTO> a = sdao.selectAll(loginSeller.getId());
+		System.out.println(a.toString());
 		
 	}
 	private void g_del() {	// 상품삭제
@@ -59,8 +61,21 @@ public class SellerService {
 		
 	}
 	private void g_add() {	// 상품등록
+		Scanner in = new Scanner(System.in);
+		System.out.println("상품명 입력");
+		String g_name = in.nextLine();
+		System.out.println("수량 입력");
+		int g_num = in.nextInt();in.nextLine();
+		System.out.println("가격 입력");
+		int price = in.nextInt();in.nextLine();
+		System.out.println("제품 설명 입력");
+		String content = in.nextLine();
+		loginSeller.setG_name(g_name);
+		loginSeller.setG_num(g_num);
+		loginSeller.setPrice(price);
+		loginSeller.setContent(content);
+		sdao.insert(loginSeller);
 		
-
 		
 	}
 	private void orderList() { //주문건 확인하기

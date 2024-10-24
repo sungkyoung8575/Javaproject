@@ -41,6 +41,12 @@ public class SellerDTO extends UserDTO {
 		this.content = content;
 	}
 
+	@Override
+	public String toString() {
+		return "등록된상품 [상품명: " + getG_name() + ", 수량: " + getG_num()
+				+ "개, 가격: " + getPrice() + "원]";
+	}
+
 
 	
 

@@ -52,30 +52,26 @@ public class MainDAO {
 
 
 		
-	public void insertG(GuestDTO dto) { // 개인고객 insert , 개인테이블,시퀀스생성
+	public void insertG(GuestDTO gdto) { // 개인고객 insert , 개인테이블,시퀀스생성
 		if(conn()) {
 			try {
 				String sql ="insert into alluser values (?,?,?,?,?,?,?)";
 				PreparedStatement psmt = conn.prepareStatement(sql);
-				psmt.setString(1, dto.getCk());
-				psmt.setString(2, dto.getId());
-				psmt.setString(3, dto.getPwd());
-				psmt.setString(4, dto.getName());
-				psmt.setString(5, dto.getAddr());
+				psmt.setString(1, gdto.getCk());
+				psmt.setString(2, gdto.getId());
+				psmt.setString(3, gdto.getPwd());
+				psmt.setString(4, gdto.getName());
+				psmt.setString(5, gdto.getAddr());
 				psmt.setString(6, "null");
 				psmt.setInt(7, 0);
 				int resultInt = psmt.executeUpdate();
-				String sql2 = "create table "+dto.getId()	// 컬럼명 임시/ 수정해야함
-							+"_g(g_name varchar2(20),"
+				String sql2 = "create table "+gdto.getId()	// 컬럼명 임시/ 수정해야함
+							+"_g (g_date timestamp default sysdate,"
+							+ "g_name varchar2(20),"
 							+ "g_num number(3),"
-							+ "g_price number(6),"
-							+ "g_date timestamp default sysdate)";
+							+ "g_price number(6))";
 				PreparedStatement psmt2 = conn.prepareStatement(sql2);
 				resultInt = psmt2.executeUpdate();
-				String sql3 ="create sequence "+dto.getId()
-							+"_g_seq";
-				PreparedStatement psmt3 = conn.prepareStatement(sql3);
-				resultInt = psmt3.executeUpdate();
 							if(resultInt > 0) {
 								conn.commit();	// 현재 작업 저장
 						}else {
@@ -116,10 +112,6 @@ public class MainDAO {
 							+ "g_content varchar2(100))";
 				PreparedStatement psmt2 = conn.prepareStatement(sql2);
 				resultInt = psmt2.executeUpdate();
-				String sql3 ="create sequence "+dto.getId()
-							+"_s_seq";
-				PreparedStatement psmt3 = conn.prepareStatement(sql3);
-				resultInt = psmt3.executeUpdate();
 				if(resultInt > 0) {
 					conn.commit();	// 현재 작업 저장
 				}else {
@@ -140,7 +132,65 @@ public class MainDAO {
 		}
 	}
 
-		public UserDTO select(String find){ 
+		public UserDTO selectID(String find){ 
+			if(conn()) {
+				try {
+					String sql = "select * from alluser where id=?";
+					PreparedStatement psmt = conn.prepareStatement(sql);
+					psmt.setString(1, find);
+					ResultSet rs = psmt.executeQuery();
+					if(rs.next()) {
+						UserDTO temp = new UserDTO();
+						temp.setCk(rs.getNString("ck"));
+						temp.setId(rs.getNString("id"));
+						temp.setPwd(rs.getNString("pwd"));
+						temp.setName(rs.getString("name"));
+						return temp;
+					}
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}finally {
+					try {
+						if(conn != null) conn.close();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+			}
+			return null;	
+		}
+		
+		public SellerDTO selectSeller(String find){ 
+			if(conn()) {
+				try {
+					String sql = "select * from alluser where id=?";
+					PreparedStatement psmt = conn.prepareStatement(sql);
+					psmt.setString(1, find);
+					ResultSet rs = psmt.executeQuery();
+					if(rs.next()) {
+						SellerDTO temp = new SellerDTO();
+						temp.setCk(rs.getNString("ck"));
+						temp.setId(rs.getNString("id"));
+						temp.setPwd(rs.getNString("pwd"));
+						temp.setName(rs.getString("name"));
+						return temp;
+					}
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}finally {
+					try {
+						if(conn != null) conn.close();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+			}
+			return null;	
+		}
+			
+		public GuestDTO selectGuest(String find){ 
 			if(conn()) {
 				try {
 					String sql = "select * from alluser where id=?";
@@ -168,6 +218,8 @@ public class MainDAO {
 			}
 			return null;	
 		}
+			
+
 
 		public ArrayList<UserDTO> selectAll(){
 			ArrayList<UserDTO> userlist=new ArrayList<UserDTO>();

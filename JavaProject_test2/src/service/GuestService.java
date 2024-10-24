@@ -7,7 +7,7 @@ import dto.GuestDTO;
 import dto.UserDTO;
 // 개인회원 서비스
 public class GuestService {
-//	GuestDTO loginGuest = null;
+	GuestDTO loginGuest = null;
 	public static GuestService gs=null;
 	private GuestDAO gdao = GuestDAO.getInstance();
 	
@@ -23,7 +23,7 @@ public class GuestService {
 	
 	
 	public void menu() {
-//		System.out.println(loginGuest.getName()+"님 환영합니다.");
+		System.out.println(loginGuest.getName()+"님 환영합니다.");
 		Scanner in = new Scanner(System.in);
 		boolean flag = true;
 		while(flag) {
